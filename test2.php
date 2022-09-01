@@ -27,17 +27,30 @@ class Api
      */
     public function get_api_path(array $array, string $template): string
     {
-        $key = array_keys($array);
-        $val = array_values($array);
 
-        $result = str_replace($key, $val, $template);
-//        $result = str_replace("%id%", $array['id'], $template);
-//        $result = str_replace("%name%", $array['name'], $result);
-//        $result = str_replace("%role%", $array['role'], $result);
-//        $result = str_replace("%salary%", $array['salary'], $result);
+        $result = str_replace($this->search(array_keys($array)), $this->replace(array_values($array)), $template);
 
         return $result;
     }
+
+    public function search(array $keys): array
+    {
+        $array = [];
+        foreach ($keys as $key) {
+            $array[] = '%' . $key . '%';
+        }
+        return $array;
+    }
+
+    public function replace(array $values):array
+    {
+        $array =[];
+        foreach ($values as $value){
+            $array[]= strtolower(ltrim(str_replace(' ','%20',$value)));
+        }
+        return $array;
+    }
+
 }
 
 $user =
